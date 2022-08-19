@@ -88,8 +88,11 @@ def click_reset():
     return
 
 def click_exit():
-    global MHSobj
-    del MHSobj
+    global MHSobj,MHSInpObj
+    if MHSobj:
+        del MHSobj
+    if MHSInpObj:
+        del MHSInpObj
     quit()
 
 def file_select():
@@ -114,6 +117,7 @@ def click_getkousuu():
 #    btn_start["state"]="normal"
 #    btn_reset["state"]="normal"
     MHSInpObj.get_colums()
+    MHSInpObj.get_date()
 
 
     return

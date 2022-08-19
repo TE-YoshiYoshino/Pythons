@@ -156,9 +156,11 @@ class MHSInputUtils:
         options.add_argument('--disable-logging')
         options.add_argument('--log-level=3')
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
-        CHROMEDRIVER="C:/Users/0000107049/Documents/Programming/Python/Scraping/chromedriver104_win32/chromedriver.exe"
-        chrome_service = service.Service(executable_path=CHROMEDRIVER)
-        driver = webdriver.Chrome(service=chrome_service,options=options)
+#        CHROMEDRIVER="C:/Users/0000107049/Documents/Programming/Python/Scraping/chromedriver104_win32/chromedriver.exe"
+        CHROMEDRIVER="C:/Users/0000107049/Documents/Programming/Python/Scraping/edgedriver_win64/msedgedriver.exe"
+#        chrome_service = service.Service(executable_path=CHROMEDRIVER)
+#        driver = webdriver.Chrome(service=chrome_service,options=options)
+        driver = webdriver.Edge(executable_path=CHROMEDRIVER)
         driver.get('https://ebisap.emcs.sony.co.jp:8092/view/login.aspx')
         time.sleep(5)
         LoginButtons=driver.find_elements(By.NAME, 'Button1')
@@ -210,6 +212,21 @@ class MHSInputUtils:
             num += 1
             N=f'{num:02}'
             key= 'hdnJoNum'+N
+
+    def get_date(self):
+        """
+        # 最初の行のXPATH↓
+        #   //*[@id="tblJissekiInput"]/tbody/tr[14]/td[1]
+        # 2番目の行のXPATH↓
+        #   //*[@id="tblJissekiInput"]/tbody/tr[15]/td[1]
+        # 最後の行のXPATH↓
+        #   //*[@id="tblJissekiInput"]/tbody/tr[50]/td[1]
+        ↓2月の最終（2/28）
+        //*[@id="tblJissekiInput"]/tbody/tr[47]/td[1]
+        """
+        # tr[14]～最後回して、日にちの一致したtrを探す。
+        element = driver.find_element(By.XPATH,"/html/body/form/div[4]/table/tbody/tr[14]/td[1]")
+        print("最初の日付",element.text)
 
     def __del__(self):
         driver.quit()
