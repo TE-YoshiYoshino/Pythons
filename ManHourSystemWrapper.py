@@ -148,11 +148,14 @@ class MHSInputUtils:
 #
 #
     driver = ""
+    date_target=""
     def __init__(self, DATEFROM, GID, SEIBAN):
         global driver
-        print("from/to/GID/Seiban",DATEFROM, GID, SEIBAN)
+        global date_target
+        date_target=DATEFROM
+#        print("from/to/GID/Seiban",DATEFROM, GID, SEIBAN)
         options = Options()
-        #options.add_argument('--headless')
+        options.add_argument('--headless')
         options.add_argument('--disable-logging')
         options.add_argument('--log-level=3')
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
@@ -182,7 +185,6 @@ class MHSInputUtils:
         # ”NŒ‚ğØ‚è‘Ö‚¦
 
     def get_colums(self):
-
         """
         try:
             tableElem = driver.find_element_by_class_name("jisseki_input_table")
@@ -227,6 +229,79 @@ class MHSInputUtils:
         # tr[14]`ÅŒã‰ñ‚µ‚ÄA“ú‚É‚¿‚Ìˆê’v‚µ‚½tr‚ğ’T‚·B
         element = driver.find_element(By.XPATH,"/html/body/form/div[4]/table/tbody/tr[14]/td[1]")
         print("Å‰‚Ì“ú•t",element.text)
+
+        Date_List=[]
+        num=14
+        key="/html/body/form/div[4]/table/tbody/tr[14]/td[1]"
+        try:
+            while driver.find_elements(By.XPATH,key):
+                Items=driver.find_elements(By.XPATH,key)
+                for Item in Items:
+                    Date_List.append(Item.text)
+                    if Item.text == date_target:
+                        print('“ú•tˆê’v %d(%s)' % (num,date_target))
+                        num_target=num
+                num += 1
+                key="/html/body/form/div[4]/table/tbody/tr["+str(num)+"]" +"/td[1]"
+            print("Date_List",Date_List)
+        except NoSuchElementException:
+            print("Not found")
+
+        #ˆê’v‚·‚és‚Ì—v‘f‚ğ”z—ñ‚É“ü‚ê‚é
+        Kousuu_List=[]
+        key="/html/body/form/div[4]/table/tbody/tr["+str(num_target)+"]" +"/td[4]/input[1]"
+        num_seiban=4
+        print("key=",key)
+        while driver.find_elements(By.XPATH,key):
+            Items=driver.find_elements(By.XPATH,key)
+            for Item in Items:
+                Kousuu_List.append(Item.get_attribute('value'))
+                num_seiban+=1
+                key="/html/body/form/div[4]/table/tbody/tr["+str(num_target)+"]" +"/td["+str(num_seiban)+"]/input[1]"
+        print("Kousuu_List=",Kousuu_List)
+
+    def set_date(self, date_year,date_month,date_new):
+        # tr[14]`ÅŒã‰ñ‚µ‚ÄA“ú‚É‚¿‚Ìˆê’v‚µ‚½tr‚ğ’T‚·B
+#        element = driver.find_element(By.XPATH,"/html/body/form/div[4]/table/tbody/tr[14]/td[1]")
+#        print("Å‰‚Ì“ú•t",element.text)
+
+        print("date_new=",date_new)
+
+#        InputItems=driver.find_elements(By.ID, 'ddlYearMonth')
+#        for InputItem in InputItems:
+#            InputItem.send_keys(date_year+'/'+date_month)
+#            InputItem.send_keys("2022/07")
+
+        Date_List=[]
+        num=14
+        key="/html/body/form/div[4]/table/tbody/tr[14]/td[1]"
+        try:
+            while driver.find_elements(By.XPATH,key):
+                Items=driver.find_elements(By.XPATH,key)
+                for Item in Items:
+                    Date_List.append(Item.text)
+                    if Item.text == date_new:
+                        print('“ú•tˆê’v %d(%s)' % (num,date_new))
+                        num_target=num
+                num += 1
+                key="/html/body/form/div[4]/table/tbody/tr["+str(num)+"]" +"/td[1]"
+            print("Date_List",Date_List)
+        except NoSuchElementException:
+            print("Not found")
+
+        #ˆê’v‚·‚és‚Ì—v‘f‚ğ”z—ñ‚É“ü‚ê‚é
+        Kousuu_List=[]
+        key="/html/body/form/div[4]/table/tbody/tr["+str(num_target)+"]" +"/td[4]/input[1]"
+        num_seiban=4
+        print("key=",key)
+        while driver.find_elements(By.XPATH,key):
+            Items=driver.find_elements(By.XPATH,key)
+            for Item in Items:
+                Kousuu_List.append(Item.get_attribute('value'))
+                num_seiban+=1
+                key="/html/body/form/div[4]/table/tbody/tr["+str(num_target)+"]" +"/td["+str(num_seiban)+"]/input[1]"
+        print("Kousuu_List=",Kousuu_List)
+
 
     def __del__(self):
         driver.quit()

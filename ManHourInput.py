@@ -18,6 +18,8 @@ import random
 import time
 from tkinter import filedialog
 import ManHourSystemWrapper
+import datetime as dt
+import locale
 
 #**** GLOBALS ****
 MHSobj = None
@@ -56,6 +58,7 @@ def click_ok():
     # -- Replace "-"
     date_from=str(date_from).replace('-','/')
     date_to=str(date_to).replace('-','/')
+
     try:
         MHSobj  = ManHourSystemWrapper.MHSUtils(date_from,date_to,GID,SEIBAN)
     except Exception as e:
@@ -109,7 +112,15 @@ def click_getkousuu():
 #        return
 
     # -- Replace "-"
-    date_from=str(date_from).replace('-','/')
+    locale.setlocale(locale.LC_TIME, '')
+#    print("date_from=",str(date_from)[0:4],str(date_from)[0:4], str(date_from)[5:7],str(date_from)[8:10])
+    date = dt.date(int(str(date_from)[0:4]), int(str(date_from)[5:7]), int(str(date_from)[8:10]))
+#    date = dt.date(2022, 8, 1)
+    print(date.strftime('%A'))  # => 'âŒójì˙'
+    print(date.strftime('%a'))  # => 'âŒ'
+#    date_from=str(date_from).replace('-','/')
+    date_from=str(date_from)[5:7]+'/'+str(date_from)[8:10]+'('+date.strftime('%a')+')'
+    print("date_from = ", date_from)
     try:
         MHSInpObj  = ManHourSystemWrapper.MHSInputUtils(date_from,GID,SEIBAN)
     except Exception as e:
@@ -119,8 +130,19 @@ def click_getkousuu():
     MHSInpObj.get_colums()
     MHSInpObj.get_date()
 
+def set_param():
+#    global date_to, date_from,MHSInpObj
+    date_from=main_win.data_entry_date_from.get_date()
+    GID=entry_GID .get()
+    SEIBAN=entry_SEIBAN .get()
+    locale.setlocale(locale.LC_TIME, '')
+    date = dt.date(int(str(date_from)[0:4]), int(str(date_from)[5:7]), int(str(date_from)[8:10]))
+    date_from=str(date_from)[5:7]+'/'+str(date_from)[8:10]+'('+date.strftime('%a')+')'
+    date_year=str(date_from)[0:4]
+    date_month=str(date_from)[5:7]
+    MHSInpObj.get_colums()
+    MHSInpObj.set_date(date_year, date_month,date_from)
 
-    return
 # MAIN ************************************************
 #def main():
 main_win = tk.Tk() 
@@ -155,6 +177,8 @@ btn_ok.grid(column=1,row=2)
 btn_start = tk.Button(frame1, text='Start', command=gather_kousuu)
 btn_start.grid(column=4,row=2)
 
+btn_setparam = tk.Button(frame1, text='ì˙ïtê›íË', command=set_param)
+btn_setparam.grid(column=3,row=0)
 
 #--frame2----------------------------------------------
 text_area = scrolledtext.ScrolledText(frame2,  
