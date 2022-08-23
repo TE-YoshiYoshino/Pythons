@@ -13,6 +13,7 @@ from selenium.webdriver.chrome import service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time
+from selenium.webdriver.common.alert import Alert
 
 #**** FUNCTIONS ****
 class MHSUtils:
@@ -214,6 +215,7 @@ class MHSInputUtils:
             num += 1
             N=f'{num:02}'
             key= 'hdnJoNum'+N
+        return Seiban_List
 
     def get_date(self):
         """
@@ -301,7 +303,24 @@ class MHSInputUtils:
                 num_seiban+=1
                 key="/html/body/form/div[4]/table/tbody/tr["+str(num_target)+"]" +"/td["+str(num_seiban)+"]/input[1]"
         print("Kousuu_List=",Kousuu_List)
+        return Kousuu_List
 
+    def send_updated_kousuu(self,key,new_kousuu):
+        print("keyÅF",key)
+#        while driver.find_elements(By.XPATH,key):
+        Items=driver.find_elements(By.XPATH,key)
+        for Item in Items:
+            Item.send_keys(new_kousuu)
+            print("êVÇµÇ¢çHêîÇÕÅF",new_kousuu)
+
+    def click_register(self):
+        RegisterButtons=driver.find_elements(By.NAME, 'btnEdit')
+        for RegisterButton in RegisterButtons:
+#            RegisterButton.send_keys(Keys.ENTER)
+#            RegisterButton.submit()
+            RegisterButton.click()
+            print("ìoò^âüÇ≥ÇÍÇ‹ÇµÇΩ")
+        Alert(driver).accept()
 
     def __del__(self):
         driver.quit()

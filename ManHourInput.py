@@ -140,8 +140,29 @@ def set_param():
     date_from=str(date_from)[5:7]+'/'+str(date_from)[8:10]+'('+date.strftime('%a')+')'
     date_year=str(date_from)[0:4]
     date_month=str(date_from)[5:7]
-    MHSInpObj.get_colums()
-    MHSInpObj.set_date(date_year, date_month,date_from)
+    num_colums=MHSInpObj.get_colums()
+    kousuu_list=MHSInpObj.set_date(date_year, date_month,date_from)
+#def sub_window():
+    sub_win = tk.Toplevel(background='green')
+    sub_win.geometry("300x100")
+#    label_sub = tk.Label(sub_win, text="サブウィンドウ")
+#    label_sub.pack()
+
+    item1=tk.Label(sub_win,text='1個目')
+    item1.grid(column=0,row=0)
+    entry_item1 = tk.Entry(sub_win,width=5)
+    entry_item1.grid(column=1,row=0)
+    entry_item1.insert(0,kousuu_list[0])
+    btn_register = tk.Button(sub_win, text='登録', command=lambda:ctrl_sub_win(sub_win))
+    btn_register.grid(column=1,row=1)
+    sub_win.focus_set()
+
+def ctrl_sub_win(win_obj):
+    key="/html/body/form/div[4]/table/tbody/tr[46]/td[5]/input[1]"
+    MHSInpObj.send_updated_kousuu(key,0)
+    MHSInpObj.click_register()
+    win_obj.destroy()
+
 
 # MAIN ************************************************
 #def main():
@@ -149,11 +170,13 @@ main_win = tk.Tk()
 main_win.title("工数確認&入力") 
 main_win.geometry("600x400")
 frame1=tk.Frame(main_win,height=100,width=600)
-frame2=tk.Frame(main_win,height=400,width=600)
+#frame2=tk.Frame(main_win,height=400,width=600)
 frame3=tk.Frame(main_win,height=200,width=600)
+frame4=tk.Frame(main_win,height=200,width=600)
 frame1.pack()
-frame2.pack()
+#frame2.pack()
 frame3.pack()
+frame4.pack()
 
 # --frame1---------------------------------------------
 lbl0=tk.Label(frame1,text='いつにする？')
@@ -181,24 +204,31 @@ btn_setparam = tk.Button(frame1, text='日付設定', command=set_param)
 btn_setparam.grid(column=3,row=0)
 
 #--frame2----------------------------------------------
-text_area = scrolledtext.ScrolledText(frame2,  
-    wrap = tk.WORD, #単語単位で改行
-    width = 80,
-    height = 20,  
-) 
-
-#text_area.grid(column = 0, row=3, padx = 10, pady = 10) 
-text_area.pack()
-text_area.focus() 
+#text_area = scrolledtext.ScrolledText(frame2,  
+#    wrap = tk.WORD, #単語単位で改行
+#    width = 80,
+#    height = 20,  
+#) 
+#text_area.pack()
+#text_area.focus() 
 
 #--frame3----------------------------------------------
 btn_exit = tk.Button(frame3, text='Exit', command=click_exit)
 #btn_exit.place(x=400, y=400)
 btn_exit.pack()
 
+#--frame4----------------------------------------------
+text_area = scrolledtext.ScrolledText(frame4,  
+    wrap = tk.WORD, #単語単位で改行
+    width = 80,
+    height = 20,  
+) 
+text_area.pack()
+text_area.focus() 
+
+
 # --配列用意----------------------------------------------- 
 texts = ['python', 'java', 'ruby']
-
 
 # --ループ開始---------------------------------------------
 main_win.mainloop() 
