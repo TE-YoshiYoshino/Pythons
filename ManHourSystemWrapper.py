@@ -303,7 +303,11 @@ class MHSInputUtils:
                 num_seiban+=1
                 key="/html/body/form/div[4]/table/tbody/tr["+str(num_target)+"]" +"/td["+str(num_seiban)+"]/input[1]"
         print("Kousuu_List=",Kousuu_List)
+<<<<<<< HEAD
         return key, Kousuu_List
+=======
+        return Kousuu_List
+>>>>>>> f645258383175c7f535111b147f2d1835a603328
 
     def send_updated_kousuu(self,key,new_kousuu):
         print("keyF",key)
