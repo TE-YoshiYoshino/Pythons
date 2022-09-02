@@ -142,6 +142,7 @@ def set_param():
     date_month=str(date_from)[5:7]
     num_colums=MHSInpObj.get_colums()
     [key, kousuu_list]=MHSInpObj.set_date(date_year, date_month,date_from)
+#    kousuu_list=MHSInpObj.set_date(date_year, date_month,date_from)
 #def sub_window():
     sub_win = tk.Toplevel(background='green')
     sub_win.geometry("300x100")
@@ -153,13 +154,16 @@ def set_param():
     entry_item1 = tk.Entry(sub_win,width=5)
     entry_item1.grid(column=1,row=0)
     entry_item1.insert(0,kousuu_list[0])
-    btn_register = tk.Button(sub_win, text='“o˜^', command=lambda:ctrl_sub_win(sub_win))
+
+    print("kousuu_list[0]=>", kousuu_list[0])
+
+    btn_register = tk.Button(sub_win, text='“o˜^', command=lambda:ctrl_sub_win(sub_win,key))
     btn_register.grid(column=1,row=1)
     sub_win.focus_set()
     print("æ“¾key‚ÍEE",key)
 
-def ctrl_sub_win(win_obj):
-    key="/html/body/form/div[4]/table/tbody/tr[46]/td[5]/input[1]"
+def ctrl_sub_win(win_obj,key):
+#    key="/html/body/form/div[4]/table/tbody/tr[46]/td[5]/input[1]"
     MHSInpObj.send_updated_kousuu(key,0)
     MHSInpObj.click_register()
     win_obj.destroy()
@@ -195,7 +199,7 @@ lbl3.grid(column=3,row=1)
 entry_SEIBAN = tk.Entry(frame1,width=10)
 entry_SEIBAN.grid(column=4,row=1)
 
-btn_ok = tk.Button(frame1, text='H”Šm”F', command=click_getkousuu)
+btn_ok = tk.Button(frame1, text='–‘O€”õ', command=click_getkousuu)
 btn_ok.grid(column=1,row=2)
 
 btn_start = tk.Button(frame1, text='Start', command=gather_kousuu)

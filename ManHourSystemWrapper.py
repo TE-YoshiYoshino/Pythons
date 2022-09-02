@@ -150,6 +150,7 @@ class MHSInputUtils:
 #
     driver = ""
     date_target=""
+    key_tag=""
     def __init__(self, DATEFROM, GID, SEIBAN):
         global driver
         global date_target
@@ -263,6 +264,7 @@ class MHSInputUtils:
         print("Kousuu_List=",Kousuu_List)
 
     def set_date(self, date_year,date_month,date_new):
+        global key_tag
         # tr[14]`ÅŒã‰ñ‚µ‚ÄA“ú‚É‚¿‚Ìˆê’v‚µ‚½tr‚ğ’T‚·B
 #        element = driver.find_element(By.XPATH,"/html/body/form/div[4]/table/tbody/tr[14]/td[1]")
 #        print("Å‰‚Ì“ú•t",element.text)
@@ -303,10 +305,16 @@ class MHSInputUtils:
                 num_seiban+=1
                 key="/html/body/form/div[4]/table/tbody/tr["+str(num_target)+"]" +"/td["+str(num_seiban)+"]/input[1]"
         print("Kousuu_List=",Kousuu_List)
-        return key, Kousuu_List
+        key_tag=key
+        return key_tag, Kousuu_List
 
     def send_updated_kousuu(self,key,new_kousuu):
+        global key_tag
+        key=key_tag
         print("keyF",key)
+        if len(key) == 0 :
+            print("key is empty")
+            return
 #        while driver.find_elements(By.XPATH,key):
         Items=driver.find_elements(By.XPATH,key)
         for Item in Items:
