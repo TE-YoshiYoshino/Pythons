@@ -140,7 +140,9 @@ def set_param():
     date_from=str(date_from)[5:7]+'/'+str(date_from)[8:10]+'('+date.strftime('%a')+')'
     date_year=str(date_from)[0:4]
     date_month=str(date_from)[5:7]
-    num_colums=MHSInpObj.get_colums()
+#    num_colums=MHSInpObj.get_colums()
+    seiban_list=MHSInpObj.get_colums()
+    print("seiban_list=",seiban_list)
     [key, kousuu_list]=MHSInpObj.set_date(date_year, date_month,date_from)
 #    kousuu_list=MHSInpObj.set_date(date_year, date_month,date_from)
 #def sub_window():
@@ -154,6 +156,26 @@ def set_param():
     entry_item1 = tk.Entry(sub_win,width=5)
     entry_item1.grid(column=1,row=0)
     entry_item1.insert(0,kousuu_list[0])
+
+    item2=tk.Label(sub_win,text='2ŒÂ–Ú')
+    item2.grid(column=2,row=0)
+    entry_item2 = tk.Entry(sub_win,width=5)
+    entry_item2.grid(column=3,row=0)
+    entry_item2.insert(0,kousuu_list[1])
+
+
+    item3=tk.Label(sub_win,text='3ŒÂ–Ú')
+    item3.grid(column=4,row=0)
+    entry_item3 = tk.Entry(sub_win,width=5)
+    entry_item3.grid(column=5,row=0)
+    entry_item3.insert(0,kousuu_list[2])
+
+    item4=tk.Label(sub_win,text='4ŒÂ–Ú')
+    item4.grid(column=6,row=0)
+    entry_item4 = tk.Entry(sub_win,width=5)
+    entry_item4.grid(column=7,row=0)
+    entry_item4.insert(0,kousuu_list[3])
+
 
     print("kousuu_list[0]=>", kousuu_list[0])
 
