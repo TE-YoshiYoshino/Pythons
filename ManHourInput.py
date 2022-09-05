@@ -141,8 +141,16 @@ def set_param():
     date_year=str(date_from)[0:4]
     date_month=str(date_from)[5:7]
     num_colums=MHSInpObj.get_colums()
+<<<<<<< HEAD
     [key, kousuu_list]=MHSInpObj.set_date(date_year, date_month,date_from)
 #    kousuu_list=MHSInpObj.set_date(date_year, date_month,date_from)
+=======
+<<<<<<< HEAD
+    [key, kousuu_list]=MHSInpObj.set_date(date_year, date_month,date_from)
+=======
+    kousuu_list=MHSInpObj.set_date(date_year, date_month,date_from)
+>>>>>>> f645258383175c7f535111b147f2d1835a603328
+>>>>>>> 55b4e2a1f7e9b85ab9ef757b92a5cf77b8475314
 #def sub_window():
     sub_win = tk.Toplevel(background='green')
     sub_win.geometry("300x100")
@@ -160,7 +168,14 @@ def set_param():
     btn_register = tk.Button(sub_win, text='“o˜^', command=lambda:ctrl_sub_win(sub_win,key))
     btn_register.grid(column=1,row=1)
     sub_win.focus_set()
+<<<<<<< HEAD
     print("Žæ“¾key‚ÍEE",key)
+=======
+<<<<<<< HEAD
+    print("Žæ“¾key‚ÍEE",key)
+=======
+>>>>>>> f645258383175c7f535111b147f2d1835a603328
+>>>>>>> 55b4e2a1f7e9b85ab9ef757b92a5cf77b8475314
 
 def ctrl_sub_win(win_obj,key):
 #    key="/html/body/form/div[4]/table/tbody/tr[46]/td[5]/input[1]"
