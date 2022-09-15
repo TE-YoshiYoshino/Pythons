@@ -296,6 +296,7 @@ class MHSInputUtils:
         #一致する行の要素を配列に入れる
         Kousuu_List=[]
         key="/html/body/form/div[4]/table/tbody/tr["+str(num_target)+"]" +"/td[4]/input[1]"
+        key_tag=key
         num_seiban=4
         print("key=",key)
         while driver.find_elements(By.XPATH,key):
@@ -304,20 +305,33 @@ class MHSInputUtils:
                 Kousuu_List.append(Item.get_attribute('value'))
                 num_seiban+=1
                 key="/html/body/form/div[4]/table/tbody/tr["+str(num_target)+"]" +"/td["+str(num_seiban)+"]/input[1]"
+#                key="/html/body/form/div[4]/table/tbody/tr["+str(num_target)+"]" +"/td[4]/input[1]"
         print("Kousuu_List=",Kousuu_List)
-        key_tag=key
+        print("driver in set_date",driver)
+#        key_tag=key
         return key_tag, Kousuu_List
 
     def send_updated_kousuu(self,key,new_kousuu):
         global key_tag
+        global driver
         key=key_tag
         print("key：",key)
         if len(key) == 0 :
             print("key is empty")
             return
+        """
+        #Change Window Handle
+        handle_array = driver.window_handles
+        # 一番最後のdriverに切り替える
+        driver.switch_to.window(handle_array[-1])
+        """
+#        print("driver=",driver)
 #        while driver.find_elements(By.XPATH,key):
-        Items=driver.find_elements(By.XPATH,key)
+#        key="/html/body/form/div[4]/table/tbody/tr[25]/td[4]/input[1]"
+#        key='//*[@id="txt00_12"]'
+        Items=driver.find_elements(By.XPATH, key)
         for Item in Items:
+            print("Item=", Item.text)
             Item.send_keys(new_kousuu)
             print("新しい工数は：",new_kousuu)
 

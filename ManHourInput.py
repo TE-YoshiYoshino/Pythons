@@ -122,7 +122,8 @@ def click_getkousuu():
     date_from=str(date_from)[5:7]+'/'+str(date_from)[8:10]+'('+date.strftime('%a')+')'
     print("date_from = ", date_from)
     try:
-        MHSInpObj  = ManHourSystemWrapper.MHSInputUtils(date_from,GID,SEIBAN)
+        if MHSInpObj == None:
+            MHSInpObj  = ManHourSystemWrapper.MHSInputUtils(date_from,GID,SEIBAN)
     except Exception as e:
         print(e)
 #    btn_start["state"]="normal"
@@ -179,14 +180,16 @@ def set_param():
 
     print("kousuu_list[0]=>", kousuu_list[0])
 
-    btn_register = tk.Button(sub_win, text='“o˜^', command=lambda:ctrl_sub_win(sub_win,key))
+    btn_register = tk.Button(sub_win, text='“o˜^', command=lambda:ctrl_sub_win(sub_win,key,entry_item1))
     btn_register.grid(column=1,row=1)
     sub_win.focus_set()
     print("æ“¾key‚ÍEE",key)
 
-def ctrl_sub_win(win_obj,key):
+def ctrl_sub_win(win_obj,key,entry_item1):
 #    key="/html/body/form/div[4]/table/tbody/tr[46]/td[5]/input[1]"
-    MHSInpObj.send_updated_kousuu(key,0)
+    print("entry_item1=",entry_item1.get())
+#    MHSInpObj.send_updated_kousuu(key,0)
+    MHSInpObj.send_updated_kousuu(key,entry_item1.get())
     MHSInpObj.click_register()
     win_obj.destroy()
 
