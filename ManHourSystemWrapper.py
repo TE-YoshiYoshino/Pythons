@@ -216,9 +216,32 @@ class MHSInputUtils:
             num += 1
             N=f'{num:02}'
             key= 'hdnJoNum'+N
-        return Seiban_List
 
-    def get_date(self):
+        SeibanName_List=[]
+        num=2
+        key= "/html/body/form/div[4]/table/tbody/tr[7]/td[2]"
+        while driver.find_elements(By.XPATH,key):
+            InputItems=driver.find_elements(By.XPATH,key)
+            for InputItem in InputItems:
+                print("Item(SeibanName)=",InputItem.text)
+                SeibanName_List.append(InputItem.text)
+            num += 1
+            key="/html/body/form/div[4]/table/tbody/tr[7]/td["+str(num)+"]"
+
+        SeibanSubItem_List=[]
+        num=2
+        key= "/html/body/form/div[4]/table/tbody/tr[11]/td[2]"
+        while driver.find_elements(By.XPATH,key):
+            InputItems=driver.find_elements(By.XPATH,key)
+            for InputItem in InputItems:
+                print("Item(SeibanName)=",InputItem.text)
+                SeibanSubItem_List.append(InputItem.text)
+            num += 1
+            key="/html/body/form/div[4]/table/tbody/tr[11]/td["+str(num)+"]"
+
+        return Seiban_List,SeibanName_List,SeibanSubItem_List
+
+    def get_date(self,num_SeibanItems):
         """
         # Å‰‚Ìs‚ÌXPATH«
         #   //*[@id="tblJissekiInput"]/tbody/tr[14]/td[1]
@@ -254,16 +277,25 @@ class MHSInputUtils:
         Kousuu_List=[]
         key="/html/body/form/div[4]/table/tbody/tr["+str(num_target)+"]" +"/td[4]/input[1]"
         num_seiban=4
+        num_temp=1
         print("key=",key)
         while driver.find_elements(By.XPATH,key):
+            if num_temp > num_SeibanItems:
+                print("num_temp=",num_temp)
+                break
             Items=driver.find_elements(By.XPATH,key)
             for Item in Items:
                 Kousuu_List.append(Item.get_attribute('value'))
                 num_seiban+=1
                 key="/html/body/form/div[4]/table/tbody/tr["+str(num_target)+"]" +"/td["+str(num_seiban)+"]/input[1]"
+                num_temp = num_temp +1
+                if num_temp > num_SeibanItems:
+                    print("num_temp=",num_temp)
+                    break
+
         print("Kousuu_List=",Kousuu_List)
 
-    def set_date(self, date_year,date_month,date_new):
+    def set_date(self, date_year,date_month,date_new,num_SeibanItems):
         global key_tag
         # tr[14]`ÅŒã‰ñ‚µ‚ÄA“ú‚É‚¿‚Ìˆê’v‚µ‚½tr‚ğ’T‚·B
 #        element = driver.find_element(By.XPATH,"/html/body/form/div[4]/table/tbody/tr[14]/td[1]")
@@ -298,14 +330,23 @@ class MHSInputUtils:
         key="/html/body/form/div[4]/table/tbody/tr["+str(num_target)+"]" +"/td[4]/input[1]"
         key_tag=key
         num_seiban=4
+        num_temp=1
         print("key=",key)
         while driver.find_elements(By.XPATH,key):
             Items=driver.find_elements(By.XPATH,key)
+            if num_temp > num_SeibanItems:
+                break;
             for Item in Items:
+                print("Item:set_date = ",Item)
+
                 Kousuu_List.append(Item.get_attribute('value'))
                 num_seiban+=1
                 key="/html/body/form/div[4]/table/tbody/tr["+str(num_target)+"]" +"/td["+str(num_seiban)+"]/input[1]"
 #                key="/html/body/form/div[4]/table/tbody/tr["+str(num_target)+"]" +"/td[4]/input[1]"
+                num_temp = num_temp +1
+                if num_temp > num_SeibanItems:
+                    print("num_temp=",num_temp)
+                    break
         print("Kousuu_List=",Kousuu_List)
         print("driver in set_date",driver)
 #        key_tag=key

@@ -128,8 +128,8 @@ def click_getkousuu():
         print(e)
 #    btn_start["state"]="normal"
 #    btn_reset["state"]="normal"
-    MHSInpObj.get_colums()
-    MHSInpObj.get_date()
+    [seiban_list,seibanName_list,seibanSubItem_list]=MHSInpObj.get_colums()
+    MHSInpObj.get_date(len(seiban_list))
 
 def set_param():
 #    global date_to, date_from,MHSInpObj
@@ -142,45 +142,93 @@ def set_param():
     date_year=str(date_from)[0:4]
     date_month=str(date_from)[5:7]
 #    num_colums=MHSInpObj.get_colums()
-    seiban_list=MHSInpObj.get_colums()
+#    seiban_list=MHSInpObj.get_colums()
+    [seiban_list,seibanName_list,seibanSubItem_list]=MHSInpObj.get_colums()
     print("seiban_list=",seiban_list)
-    [key, kousuu_list]=MHSInpObj.set_date(date_year, date_month,date_from)
-#    kousuu_list=MHSInpObj.set_date(date_year, date_month,date_from)
-#def sub_window():
+    [key, kousuu_list]=MHSInpObj.set_date(date_year, date_month,date_from,len(seiban_list))
+
+    num_items=len(kousuu_list)
+
     sub_win = tk.Toplevel(background='green')
     sub_win.geometry("300x100")
 #    label_sub = tk.Label(sub_win, text="ƒTƒuƒEƒBƒ“ƒhƒE")
 #    label_sub.pack()
 
-    item1=tk.Label(sub_win,text='1ŒÂ–Ú')
+    entry_item=[]
+    for loop in range(0,len(kousuu_list)):
+#        print("loop,num=",loop, len(kousuu_list))
+        """
+        exec_command = 'item'+str(loop) + '='+'tk.Label(sub_win,text=seiban_list['+str(loop) + '])'
+        print("command=",exec_command)
+        exec(exec_command)
+  
+        exec_command = 'item'+str(loop)+'.grid(column='+str(loop)+',row=0)'
+        print("command=",exec_command)
+        exec(exec_command)
+
+        exec_command = 'entry_item'+str(loop) + '=' + 'tk.Entry(sub_win,width=5)'
+        print("command=",exec_command)
+        exec(exec_command)
+        col_order=loop+1
+        exec_command = 'entry_item'+str(loop) + '.grid(column=' +str(loop)+',row=2)'
+        print("command=",exec_command)
+        exec(exec_command)
+
+        exec_command = 'entry_item'+str(loop) + '.insert(0,kousuu_list['+str(loop)+'])'
+        print("command=",exec_command)
+        exec(exec_command)
+        """
+
+        item = tk.Label(sub_win,text=seiban_list[loop])
+        item.grid(column=loop,row=0)
+        temp=tk.Entry(sub_win,width=5)
+        entry_item.append(temp)
+        entry_item[loop].grid(column=loop,row=2)
+        entry_item[loop].insert(0,kousuu_list[loop])
+
+        print("--")
+        print("--")
+
+#        item1=tk.Label(sub_win,text=seiban_list[loop])
+#        item1.grid(column=0,row=0)
+#        entry_item1 = tk.Entry(sub_win,width=5)
+#        entry_item1.grid(column=1,row=0)
+#        entry_item1.insert(0,kousuu_list[loop])
+
+#        loop += 1
+
+
+    """
+    item1=tk.Label(sub_win,text=seiban_list[0])
     item1.grid(column=0,row=0)
     entry_item1 = tk.Entry(sub_win,width=5)
     entry_item1.grid(column=1,row=0)
     entry_item1.insert(0,kousuu_list[0])
 
-    item2=tk.Label(sub_win,text='2ŒÂ–Ú')
+    item2=tk.Label(sub_win,text=seiban_list[1])
     item2.grid(column=2,row=0)
     entry_item2 = tk.Entry(sub_win,width=5)
     entry_item2.grid(column=3,row=0)
     entry_item2.insert(0,kousuu_list[1])
 
 
-    item3=tk.Label(sub_win,text='3ŒÂ–Ú')
+    item3=tk.Label(sub_win,text=seiban_list[2])
     item3.grid(column=4,row=0)
     entry_item3 = tk.Entry(sub_win,width=5)
     entry_item3.grid(column=5,row=0)
     entry_item3.insert(0,kousuu_list[2])
 
-    item4=tk.Label(sub_win,text='4ŒÂ–Ú')
+    item4=tk.Label(sub_win,text=seiban_list[3])
     item4.grid(column=6,row=0)
     entry_item4 = tk.Entry(sub_win,width=5)
     entry_item4.grid(column=7,row=0)
     entry_item4.insert(0,kousuu_list[3])
-
+    """
 
     print("kousuu_list[0]=>", kousuu_list[0])
+    print("entry_item0=",entry_item[0])
 
-    btn_register = tk.Button(sub_win, text='“o˜^', command=lambda:ctrl_sub_win(sub_win,key,entry_item1))
+    btn_register = tk.Button(sub_win, text='“o˜^', command=lambda:ctrl_sub_win(sub_win,key,entry_item[0]))
     btn_register.grid(column=1,row=1)
     sub_win.focus_set()
     print("æ“¾key‚ÍEE",key)
