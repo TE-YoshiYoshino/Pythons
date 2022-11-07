@@ -143,14 +143,15 @@ def set_param():
     date_month=str(date_from)[5:7]
 #    num_colums=MHSInpObj.get_colums()
 #    seiban_list=MHSInpObj.get_colums()
+    print("対象日=",date_from)
     [seiban_list,seibanName_list,seibanSubItem_list]=MHSInpObj.get_colums()
     print("seiban_list=",seiban_list)
     [key, kousuu_list]=MHSInpObj.set_date(date_year, date_month,date_from,len(seiban_list))
 
     num_items=len(kousuu_list)
 
-    sub_win = tk.Toplevel(background='green')
-    sub_win.geometry("300x100")
+    sub_win = tk.Toplevel()
+    sub_win.geometry("900x100")
 #    label_sub = tk.Label(sub_win, text="サブウィンドウ")
 #    label_sub.pack()
 
@@ -180,10 +181,14 @@ def set_param():
         """
 
         item = tk.Label(sub_win,text=seiban_list[loop])
-        item.grid(column=loop,row=0)
-        temp=tk.Entry(sub_win,width=5)
+        item.grid(column=loop+1,row=0)
+
+        item = tk.Label(sub_win,text=seibanName_list[loop])
+        item.grid(column=loop+1,row=1,padx=10)
+
+        temp=tk.Entry(sub_win,width=15)
         entry_item.append(temp)
-        entry_item[loop].grid(column=loop,row=2)
+        entry_item[loop].grid(column=loop+1,row=2)
         entry_item[loop].insert(0,kousuu_list[loop])
 
         print("--")
@@ -228,16 +233,23 @@ def set_param():
     print("kousuu_list[0]=>", kousuu_list[0])
     print("entry_item0=",entry_item[0])
 
-    btn_register = tk.Button(sub_win, text='登録', command=lambda:ctrl_sub_win(sub_win,key,entry_item[0]))
-    btn_register.grid(column=1,row=1)
+    item = tk.Label(sub_win,text=date_from,bg="LightSteelBlue")
+    item.grid(column=0,row=0,rowspan = 3, sticky=tk.N+tk.S)
+
+    btn_register = tk.Button(sub_win, text='Save', command=lambda:ctrl_sub_win(sub_win,key,entry_item))
+    btn_register.grid(column=len(kousuu_list)+1,row=2)
+
+    btn_register = tk.Button(sub_win, text='Close', command=sub_win.destroy)
+    btn_register.grid(column=len(kousuu_list)+1,row=3)
+
     sub_win.focus_set()
     print("取得keyは・・",key)
 
-def ctrl_sub_win(win_obj,key,entry_item1):
+def ctrl_sub_win(win_obj,key,entry_items):
 #    key="/html/body/form/div[4]/table/tbody/tr[46]/td[5]/input[1]"
-    print("entry_item1=",entry_item1.get())
+    print("entry_item1=",entry_items[0].get())
 #    MHSInpObj.send_updated_kousuu(key,0)
-    MHSInpObj.send_updated_kousuu(key,entry_item1.get())
+    MHSInpObj.send_updated_kousuu(key,entry_items[0].get())
     MHSInpObj.click_register()
     win_obj.destroy()
 
