@@ -20,6 +20,7 @@ from tkinter import filedialog
 import ManHourSystemWrapper
 import datetime as dt
 import locale
+from decimal import Decimal
 
 #**** GLOBALS ****
 MHSobj = None
@@ -146,63 +147,33 @@ def set_param():
     print("対象日=",date_from)
     [seiban_list,seibanName_list,seibanSubItem_list]=MHSInpObj.get_colums()
     print("seiban_list=",seiban_list)
-    [key, kousuu_list]=MHSInpObj.set_date(date_year, date_month,date_from,len(seiban_list))
+    [key_list,key, kousuu_list,lysithea_hours]=MHSInpObj.set_date(date_year, date_month,date_from,len(seiban_list))
+
+    print("key_list=",key_list)
 
     num_items=len(kousuu_list)
 
     sub_win = tk.Toplevel()
-    sub_win.geometry("900x100")
-#    label_sub = tk.Label(sub_win, text="サブウィンドウ")
-#    label_sub.pack()
+    sub_win.geometry("1000x100")
+
 
     entry_item=[]
+    kousuu_total =0
     for loop in range(0,len(kousuu_list)):
-#        print("loop,num=",loop, len(kousuu_list))
-        """
-        exec_command = 'item'+str(loop) + '='+'tk.Label(sub_win,text=seiban_list['+str(loop) + '])'
-        print("command=",exec_command)
-        exec(exec_command)
-  
-        exec_command = 'item'+str(loop)+'.grid(column='+str(loop)+',row=0)'
-        print("command=",exec_command)
-        exec(exec_command)
-
-        exec_command = 'entry_item'+str(loop) + '=' + 'tk.Entry(sub_win,width=5)'
-        print("command=",exec_command)
-        exec(exec_command)
-        col_order=loop+1
-        exec_command = 'entry_item'+str(loop) + '.grid(column=' +str(loop)+',row=2)'
-        print("command=",exec_command)
-        exec(exec_command)
-
-        exec_command = 'entry_item'+str(loop) + '.insert(0,kousuu_list['+str(loop)+'])'
-        print("command=",exec_command)
-        exec(exec_command)
-        """
-
         item = tk.Label(sub_win,text=seiban_list[loop])
-        item.grid(column=loop+1,row=0)
+        item.grid(column=loop+1+1,row=0)
 
         item = tk.Label(sub_win,text=seibanName_list[loop])
-        item.grid(column=loop+1,row=1,padx=10)
+        item.grid(column=loop+1+1,row=1,padx=10)
 
         temp=tk.Entry(sub_win,width=15)
         entry_item.append(temp)
-        entry_item[loop].grid(column=loop+1,row=2)
+        entry_item[loop].grid(column=loop+1+1,row=2)
         entry_item[loop].insert(0,kousuu_list[loop])
-
+#        kousuu_total += int(kousuu_list[loop])
+        kousuu_total += Decimal(kousuu_list[loop])
+        print("kousuu_total=",kousuu_total)
         print("--")
-        print("--")
-
-#        item1=tk.Label(sub_win,text=seiban_list[loop])
-#        item1.grid(column=0,row=0)
-#        entry_item1 = tk.Entry(sub_win,width=5)
-#        entry_item1.grid(column=1,row=0)
-#        entry_item1.insert(0,kousuu_list[loop])
-
-#        loop += 1
-
-
     """
     item1=tk.Label(sub_win,text=seiban_list[0])
     item1.grid(column=0,row=0)
@@ -236,23 +207,57 @@ def set_param():
     item = tk.Label(sub_win,text=date_from,bg="LightSteelBlue")
     item.grid(column=0,row=0,rowspan = 3, sticky=tk.N+tk.S)
 
-    btn_register = tk.Button(sub_win, text='Save', command=lambda:ctrl_sub_win(sub_win,key,entry_item))
-    btn_register.grid(column=len(kousuu_list)+1,row=2)
+    item = tk.Label(sub_win,text="リシテア")
+    item.grid(column=1,row=0,sticky=tk.N+tk.S)
+
+    item = tk.Entry(sub_win,text=str(lysithea_hours))
+    item.delete(0,tk.END)
+    item.insert(0,str(lysithea_hours))
+    item.grid(column=1,row=1,sticky=tk.N+tk.S)
+
+    item = tk.Entry(sub_win,text=str(kousuu_total))
+    item.delete(0,tk.END)
+    item.insert(0,str(kousuu_total))
+    item.grid(column=1,row=2,sticky=tk.N+tk.S)
+
+    btn_register = tk.Button(sub_win, text='Save', command=lambda:ctrl_sub_win(sub_win,key_list,entry_item))
+    btn_register.grid(column=len(kousuu_list)+1+1,row=2)
 
     btn_register = tk.Button(sub_win, text='Close', command=sub_win.destroy)
-    btn_register.grid(column=len(kousuu_list)+1,row=3)
+    btn_register.grid(column=len(kousuu_list)+1+1,row=3)
+
+#    btn_register = tk.Button(sub_win, text='Reload', command=lambda:ctrl_sub_win_reload(sub_win))
+    btn_register = tk.Button(sub_win, text='合計確認', command=lambda:ctrl_sub_win_recalculate(sub_win,entry_item))
+    btn_register.grid(column=len(kousuu_list)+1+1,row=1)
+
 
     sub_win.focus_set()
     print("取得keyは・・",key)
 
-def ctrl_sub_win(win_obj,key,entry_items):
+def ctrl_sub_win(win_obj,key_list,entry_items):
 #    key="/html/body/form/div[4]/table/tbody/tr[46]/td[5]/input[1]"
     print("entry_item1=",entry_items[0].get())
 #    MHSInpObj.send_updated_kousuu(key,0)
-    MHSInpObj.send_updated_kousuu(key,entry_items[0].get())
+#    MHSInpObj.send_updated_kousuu(key_list[0],entry_items[0].get())
+#    MHSInpObj.send_updated_kousuu(key_list[1],entry_items[1].get())
+    
+    for loop in range(0,len(entry_items)):
+        MHSInpObj.send_updated_kousuu(key_list[loop],entry_items[loop].get())
+
     MHSInpObj.click_register()
     win_obj.destroy()
 
+def ctrl_sub_win_reload(win_obj):
+    win_obj.destroy()
+    set_param()
+    return
+
+def ctrl_sub_win_recalculate(win_obj,kousuu):
+    kousuu_total=0
+    for loop in range(0,len(kousuu)):
+        kousuu_total += Decimal(kousuu[loop].get())
+    messagebox.showinfo('工数トータル', str(kousuu_total))
+    return
 
 # MAIN ************************************************
 #def main():

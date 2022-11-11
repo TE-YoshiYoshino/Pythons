@@ -327,12 +327,14 @@ class MHSInputUtils:
 
         #ˆê’v‚·‚és‚Ì—v‘f‚ğ”z—ñ‚É“ü‚ê‚é
         Kousuu_List=[]
+        key_list=[]
         key="/html/body/form/div[4]/table/tbody/tr["+str(num_target)+"]" +"/td[4]/input[1]"
         key_tag=key
         num_seiban=4
         num_temp=1
         print("key=",key)
         while driver.find_elements(By.XPATH,key):
+            key_list.append(key)
             Items=driver.find_elements(By.XPATH,key)
             if num_temp > num_SeibanItems:
                 break;
@@ -348,14 +350,20 @@ class MHSInputUtils:
                     print("num_temp=",num_temp)
                     break
         print("Kousuu_List=",Kousuu_List)
-        print("driver in set_date",driver)
-#        key_tag=key
-        return key_tag, Kousuu_List
+
+#   Get Lysithea Data
+        key = "/html/body/form/div[4]/table/tbody/tr["+str(num_target)+"]" +"/td[2]"
+        Items=driver.find_elements(By.XPATH,key)
+        for Item in Items:
+            lysithea_data = Item.text
+            print("lysithea_data=",lysithea_data)
+
+        return key_list,key_tag, Kousuu_List,lysithea_data
 
     def send_updated_kousuu(self,key,new_kousuu):
-        global key_tag
+#        global key_tag
         global driver
-        key=key_tag
+#        key=key_tag
         print("keyF",key)
         if len(key) == 0 :
             print("key is empty")
@@ -373,6 +381,7 @@ class MHSInputUtils:
         Items=driver.find_elements(By.XPATH, key)
         for Item in Items:
             print("Item=", Item.text)
+            Item.clear()
             Item.send_keys(new_kousuu)
             print("V‚µ‚¢H”‚ÍF",new_kousuu)
 
@@ -383,6 +392,7 @@ class MHSInputUtils:
 #            RegisterButton.submit()
             RegisterButton.click()
             print("“o˜^‰Ÿ‚³‚ê‚Ü‚µ‚½")
+        time.sleep(3)
         Alert(driver).accept()
 
     def __del__(self):
