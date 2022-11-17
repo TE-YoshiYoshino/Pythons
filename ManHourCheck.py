@@ -61,15 +61,20 @@ def click_ok():
     date_from=str(date_from).replace('-','/')
     date_to=str(date_to).replace('-','/')
     try:
+        if MHSobj != NONE:
+            del MHSobj
         MHSobj  = ManHourSystemWrapper.MHSUtils(date_from,date_to,GID,SEIBAN)
     except Exception as e:
         print(e)
     btn_start["state"]="normal"
-    btn_reset["state"]="normal"
+#    btn_reset["state"]="normal"
 
 def gather_kousuu():
     try:
         Date = MHSobj.get_date()
+
+        print("Date=", Date)
+
         Seiban = MHSobj.get_seiban()
         GIDs = MHSobj.get_gids()
         ManHour = MHSobj.get_manhour()

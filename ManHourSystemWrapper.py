@@ -29,9 +29,16 @@ class MHSUtils:
         options.add_argument('--disable-logging')
         options.add_argument('--log-level=3')
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
-        CHROMEDRIVER="C:/Users/0000107049/Documents/Programming/Python/Scraping/chromedriver104_win32/chromedriver.exe"
+#        CHROMEDRIVER="C:/Users/0000107049/Documents/Programming/Python/Scraping/chromedriver104_win32/chromedriver.exe"
+
+        CHROMEDRIVER="C:/Users/0000107049/Documents/Programming/Python/Scraping/edgedriver_win64/msedgedriver.exe"
+
         chrome_service = service.Service(executable_path=CHROMEDRIVER)
-        driver = webdriver.Chrome(service=chrome_service,options=options)
+#        driver = webdriver.Chrome(service=chrome_service,options=options)
+
+        driver = webdriver.Edge(executable_path=CHROMEDRIVER)
+
+
         driver.get('https://ebisap.emcs.sony.co.jp:8092/view/login.aspx')
         time.sleep(5)
         LoginButtons=driver.find_elements(By.NAME, 'Button1')
