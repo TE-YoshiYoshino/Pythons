@@ -8,10 +8,17 @@
 ##############################################
 #**** MODULES ****
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome import service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+
+# Chrome�̏ꍇ
+#from selenium.webdriver.chrome.options import Options
+#from selenium.webdriver.chrome import service
+
+# Edge�̏ꍇ
+from selenium.webdriver.edge.service import Service
+from selenium.webdriver.edge.options import Options
+
 import time
 from selenium.webdriver.common.alert import Alert
 
@@ -168,11 +175,15 @@ class MHSInputUtils:
         options.add_argument('--disable-logging')
         options.add_argument('--log-level=3')
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
+
+        options.use_chromium = True
+
 #        CHROMEDRIVER="C:/Users/0000107049/Documents/Programming/Python/Scraping/chromedriver104_win32/chromedriver.exe"
         CHROMEDRIVER="C:/Users/0000107049/Documents/Programming/Python/Scraping/edgedriver_win64/msedgedriver.exe"
 #        chrome_service = service.Service(executable_path=CHROMEDRIVER)
 #        driver = webdriver.Chrome(service=chrome_service,options=options)
-        driver = webdriver.Edge(executable_path=CHROMEDRIVER)
+#        driver = webdriver.Edge(executable_path=CHROMEDRIVER)
+        driver = webdriver.Edge(service=Service(CHROMEDRIVER),options=options)
         driver.get('https://ebisap.emcs.sony.co.jp:8092/view/login.aspx')
         time.sleep(5)
         LoginButtons=driver.find_elements(By.NAME, 'Button1')
