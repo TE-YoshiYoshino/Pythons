@@ -105,7 +105,7 @@ def file_select():
     entry_file.insert(tk.END, filePath)
 
 def click_getkousuu():
-    global date_to, date_from,MHSInpObj
+    global date_to, date_from,MHSInpObj,btn_setparam
     date_from=main_win.data_entry_date_from.get_date()
     GID=entry_GID .get()
     SEIBAN=entry_SEIBAN .get()
@@ -131,6 +131,8 @@ def click_getkousuu():
 #    btn_reset["state"]="normal"
     [seiban_list,seibanName_list,seibanSubItem_list]=MHSInpObj.get_colums()
     MHSInpObj.get_date(len(seiban_list))
+
+    btn_setparam["state"] = "normal"
 
 def set_param():
 #    global date_to, date_from,MHSInpObj
@@ -230,7 +232,6 @@ def set_param():
     btn_register = tk.Button(sub_win, text='合計確認', command=lambda:ctrl_sub_win_recalculate(sub_win,entry_item))
     btn_register.grid(column=len(kousuu_list)+1+1,row=1)
 
-
     sub_win.focus_set()
     print("取得keyは・・",key)
 
@@ -297,6 +298,7 @@ btn_start.grid(column=4,row=2)
 
 btn_setparam = tk.Button(frame1, text='日付設定', command=set_param)
 btn_setparam.grid(column=3,row=0)
+btn_setparam["state"] = "disable"
 
 #--frame2----------------------------------------------
 #text_area = scrolledtext.ScrolledText(frame2,  
