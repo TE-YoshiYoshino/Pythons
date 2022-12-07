@@ -10,6 +10,8 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+import os
+from os.path import join
 
 # ChromeÇÃèÍçá
 #from selenium.webdriver.chrome.options import Options
@@ -36,16 +38,14 @@ class MHSUtils:
         options.add_argument('--disable-logging')
         options.add_argument('--log-level=3')
         options.add_experimental_option('excludeSwitches', ['enable-logging'])
-#        CHROMEDRIVER="C:/Users/0000107049/Documents/Programming/Python/Scraping/chromedriver104_win32/chromedriver.exe"
-
-        CHROMEDRIVER="C:/Users/0000107049/Documents/Programming/Python/Scraping/edgedriver_win64/msedgedriver.exe"
+#        CHROMEDRIVER="C:/Users/0000107049/Documents/Programming/Python/Scraping/edgedriver_win64/msedgedriver.exe"
 
 #        chrome_service = service.Service(executable_path=CHROMEDRIVER)
 #        driver = webdriver.Chrome(service=chrome_service,options=options)
 
 #        driver = webdriver.Edge(executable_path=CHROMEDRIVER)
+        CHROMEDRIVER=MHSUtils.resource_path('./driver/msedgedriver.exe')
         driver = webdriver.Edge(service=Service(CHROMEDRIVER),options=options)
-
         driver.get('https://ebisap.emcs.sony.co.jp:8092/view/login.aspx')
         time.sleep(5)
         LoginButtons=driver.find_elements(By.NAME, 'Button1')
@@ -93,6 +93,14 @@ class MHSUtils:
         InputItems=driver.find_elements(By.NAME, 'btnSearch')
         for InputItem in InputItems:
             InputItem.send_keys(Keys.ENTER)
+
+    @staticmethod
+    def resource_path(relative_path):
+        try:
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.dirname(__file__)
+        return os.path.join(base_path, relative_path)
 
     def get_date(self):
         Date_List=[]
@@ -165,6 +173,7 @@ class MHSInputUtils:
     driver = ""
     date_target=""
     key_tag=""
+
     def __init__(self, DATEFROM, GID, SEIBAN):
         global driver
         global date_target
@@ -178,11 +187,14 @@ class MHSInputUtils:
 
         options.use_chromium = True
 
-#        CHROMEDRIVER="C:/Users/0000107049/Documents/Programming/Python/Scraping/chromedriver104_win32/chromedriver.exe"
-        CHROMEDRIVER="C:/Users/0000107049/Documents/Programming/Python/Scraping/edgedriver_win64/msedgedriver.exe"
+#        CHROMEDRIVER="C:/Users/0000107049/Documents/Programming/Python/Scraping/edgedriver_win64/msedgedriver.exe"
 #        chrome_service = service.Service(executable_path=CHROMEDRIVER)
 #        driver = webdriver.Chrome(service=chrome_service,options=options)
 #        driver = webdriver.Edge(executable_path=CHROMEDRIVER)
+
+        print("step1")
+
+        CHROMEDRIVER=MHSInputUtils.resource_path('./driver/msedgedriver.exe')
         driver = webdriver.Edge(service=Service(CHROMEDRIVER),options=options)
         driver.get('https://ebisap.emcs.sony.co.jp:8092/view/login.aspx')
         time.sleep(5)
@@ -203,6 +215,14 @@ class MHSInputUtils:
         driver.switch_to.window(handle_array[-1])
 
         # îNåéÇêÿÇËë÷Ç¶
+
+    @staticmethod
+    def resource_path(relative_path):
+        try:
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.dirname(__file__)
+        return os.path.join(base_path, relative_path)
 
     def get_colums(self):
         """
