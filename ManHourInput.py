@@ -21,6 +21,7 @@ import ManHourSystemWrapper
 import datetime as dt
 import locale
 from decimal import Decimal
+from concurrent.futures import ThreadPoolExecutor
 
 #**** GLOBALS ****
 MHSobj = None
@@ -133,6 +134,10 @@ def click_getkousuu():
     MHSInpObj.get_date(len(seiban_list))
 
     btn_setparam["state"] = "normal"
+
+def click_getready(executor):
+    executor.submit(click_getkousuu)
+    messagebox.showinfo('Infomation', "Please wait for a while until system initiation finished.")
 
 def set_param():
 #    global date_to, date_from,MHSInpObj
@@ -257,11 +262,13 @@ def ctrl_sub_win_recalculate(win_obj,kousuu):
     kousuu_total=0
     for loop in range(0,len(kousuu)):
         kousuu_total += Decimal(kousuu[loop].get())
-    messagebox.showinfo('工数トータル', str(kousuu_total))
+    messagebox.showinfo('Total Amout ', str(kousuu_total))
     return
 
 # MAIN ************************************************
 #def main():
+tpe = ThreadPoolExecutor(max_workers=10)
+futures=[]
 main_win = tk.Tk() 
 main_win.title("工数確認&入力") 
 main_win.geometry("600x400")
@@ -290,8 +297,11 @@ lbl3.grid(column=3,row=1)
 entry_SEIBAN = tk.Entry(frame1,width=10)
 entry_SEIBAN.grid(column=4,row=1)
 
-btn_ok = tk.Button(frame1, text='事前準備', command=click_getkousuu)
+#btn_ok = tk.Button(frame1, text='事前準備', command=click_getkousuu)
+#btn_ok.grid(column=1,row=2)
+btn_ok = tk.Button(frame1, text='Get Ready', command=lambda:click_getready(tpe))
 btn_ok.grid(column=1,row=2)
+
 
 btn_start = tk.Button(frame1, text='Start', command=gather_kousuu)
 btn_start.grid(column=4,row=2)
