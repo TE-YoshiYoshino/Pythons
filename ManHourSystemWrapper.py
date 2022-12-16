@@ -192,8 +192,6 @@ class MHSInputUtils:
 #        driver = webdriver.Chrome(service=chrome_service,options=options)
 #        driver = webdriver.Edge(executable_path=CHROMEDRIVER)
 
-        print("step1")
-
         CHROMEDRIVER=MHSInputUtils.resource_path('./driver/msedgedriver.exe')
         driver = webdriver.Edge(service=Service(CHROMEDRIVER),options=options)
         driver.get('https://ebisap.emcs.sony.co.jp:8092/view/login.aspx')
@@ -332,6 +330,64 @@ class MHSInputUtils:
                     break
 
         print("Kousuu_List=",Kousuu_List)
+
+    def get_allKouusuu(self,num_SeibanItems):
+        print("allKousuu")
+        allKousuu_List=[]
+        num_target=14
+        key="/html/body/form/div[4]/table/tbody/tr["+str(num_target)+"]" +"/td[4]/input[1]"
+        num_seiban=4
+        num_temp=1
+        while driver.find_elements(By.XPATH,key):
+#            if num_temp > num_SeibanItems:
+#                print("num_temp=",num_temp)
+#                break
+
+            while num_temp <= num_SeibanItems:
+                Items=driver.find_elements(By.XPATH,key)
+                for Item in Items:
+                    allKousuu_List.append(Item.get_attribute('value'))
+#                    if num_temp > num_SeibanItems:
+#                        print("num_temp=",num_temp)
+#                        break
+                num_seiban+=1
+                num_temp += 1
+                key="/html/body/form/div[4]/table/tbody/tr["+str(num_target)+"]" +"/td["+str(num_seiban)+"]/input[1]"
+                print("key=",key)
+
+            num_target+=1
+            num_seiban=4
+            num_temp=1
+            if num_target == 29:    # tr[29]～tr[34]は項目名なのでスキップ
+                num_target=35
+            key="/html/body/form/div[4]/table/tbody/tr["+str(num_target)+"]" +"/td["+str(num_seiban)+"]/input[1]"
+#            Items=driver.find_elements(By.XPATH,key)
+#            num_temp=1
+#            key="/html/body/form/div[4]/table/tbody/tr["+str(num_target)+"]" +"/td["+str(num_seiban)+"]/input[1]"
+
+        print("Final key=",key)
+        print("allKousuu=",allKousuu_List)
+
+        Date_List=[]
+        num=14
+        key="/html/body/form/div[4]/table/tbody/tr[14]/td[1]"
+        try:
+            while driver.find_elements(By.XPATH,key):
+                Items=driver.find_elements(By.XPATH,key)
+                for Item in Items:
+                    Date_List.append(Item.text)
+                num += 1
+                if num == 29:    # tr[29]～tr[34]は項目名なのでスキップ
+                    num=35
+                if num==51:
+                    break
+                key="/html/body/form/div[4]/table/tbody/tr["+str(num)+"]" +"/td[1]"
+            print("Date_List",Date_List)
+        except NoSuchElementException:
+            print("Not found")
+
+        return allKousuu_List,Date_List
+
 
     def set_date(self, date_year,date_month,date_new,num_SeibanItems):
         global key_tag
