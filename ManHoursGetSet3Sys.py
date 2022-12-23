@@ -52,6 +52,10 @@ def main():
         height = 20,  
     ) 
 
+    text_area.tag_config('test', foreground='red',background='black')
+    text_area.tag_config('today', foreground='blue',background='yellow')
+    text_area.tag_config('weekends', foreground='grey')
+
     #text_area.grid(column = 0, row=3, padx = 10, pady = 10) 
     text_area.pack()
     text_area.focus() 
@@ -77,7 +81,7 @@ def getReadyAndShowList():
     locale.setlocale(locale.LC_TIME, '')
     print("date_from=",str(date_from)[0:4],str(date_from)[0:4], str(date_from)[5:7],str(date_from)[8:10])
     date = dt.date(int(str(date_from)[0:4]), int(str(date_from)[5:7]), int(str(date_from)[8:10]))
-    date = dt.date(2022, 8, 1)
+#    date = dt.date(2022, 8, 1)
     print(date.strftime('%A'))  # => '‰Î—j“ú'
     print(date.strftime('%a'))  # => '‰Î'
     date_from=str(date_from).replace('-','/')
@@ -94,7 +98,7 @@ def getReadyAndShowList():
 
     print("Nof seibanName_list=", seiban_list )
 #    text_area.insert(tk.END,  "(Date)      " + "\t" + "(»”Ô)  "+"\t" +"(H”)     " + "\t\n" )
-    text_area.insert(tk.END,  "(Date)      " )
+    text_area.insert(tk.END,  "(Date)      ")
     i=0
     while i < len(seiban_list):
         text_area.insert(tk.END, "\t"+seibanName_list[i])
@@ -105,13 +109,39 @@ def getReadyAndShowList():
     n=0
     while i < len(allKousuu_List) + 1:
         j = 1
-        text_area.insert(tk.END, Date_List[n]+"\t" )
+
+        DayOfWeek=Date_List[n]
+        DayOfWeek=str(DayOfWeek)
+        try :
+            l=DayOfWeek.find("(")
+            DOW=DayOfWeek[l+1]
+        except TypeError as e:
+            print(e)  # must be str, not NoneType
+        if DOW=="“y" or  DOW=="“ú":
+            n+=1
+            i+=len(seiban_list)
+            text_area.insert(tk.END, "\n" )
+            continue;
+        today_flag=False
+        print("date_from->",date_from)
+        print("Date_List[n]->",Date_List[n])
+
+        if str(Date_List[n]) == date_from:
+            today_flag=True
+
+        if today_flag is True:
+            text_area.insert(tk.END, Date_List[n]+"\t" ,'today')
+        else:
+            text_area.insert(tk.END, Date_List[n]+"\t")
         n+=1
         while j < len(seiban_list) +1 :
 #        print("Date=",Date[i-1])
 #            gKousuuData.append([Date[i-1],Seiban[i-1],ManHour[i-1]])
 #            text_area.insert(tk.END, Date[i-1] + "\t" + seibanName[i-1] + "\t" +ManHour[i-1] +"\n")
-            text_area.insert(tk.END, "                 "+allKousuu_List[i-1] )
+            if today_flag is True:
+                text_area.insert(tk.END, "                 "+allKousuu_List[i-1] ,'today')
+            else:
+                text_area.insert(tk.END, "                 "+allKousuu_List[i-1] )
             text_area.insert(tk.END, "\t" )
             j += 1
             i+=1
